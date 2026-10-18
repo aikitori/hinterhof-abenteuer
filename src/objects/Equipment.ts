@@ -507,6 +507,8 @@ export class Sandbox extends Equipment {
 export class DressBox extends Equipment implements Seat {
   private readonly image: Phaser.GameObjects.Image;
   private guest?: Kid;
+  /** Laufende Schatten-Einfärbung (ein Zähler-Tween, hängt nicht am Kind). */
+  private tintTween?: Phaser.Tweens.Tween;
 
   constructor(scene: Phaser.Scene, def: EquipmentDef) {
     super(scene, def);
@@ -586,7 +588,9 @@ export class DressBox extends Equipment implements Seat {
       onComplete: () => {
         kid.setVisible(false).setAlpha(1).setScale(1).clearTint();
         this.wobble(false);
-        this.scene.time.delayedCall(260, () => (this.scene as PlaygroundScene).openDressUp(kid, () => this.comeOut(kid)));
+        this.scene.time.delayedCall(260, () => {
+          if (this.guest === kid) (this.scene as PlaygroundScene).openDressUp(kid, () => this.comeOut(kid));
+        });
       },
     });
   }
@@ -595,7 +599,8 @@ export class DressBox extends Equipment implements Seat {
   private fadeTint(kid: Kid, from: number, to: number, duration: number): void {
     const light = Phaser.Display.Color.ValueToColor(0xffffff);
     const dark = Phaser.Display.Color.ValueToColor(0x4a3a2e);
-    this.scene.tweens.addCounter({
+    this.tintTween?.stop();
+    this.tintTween = this.scene.tweens.addCounter({
       from,
       to,
       duration,
@@ -644,7 +649,10 @@ export class DressBox extends Equipment implements Seat {
     kid.seatedOn = undefined;
     kid.exitPoint = undefined;
     kid.mode = 'idle';
-    kid.setVisible(true).setAlpha(1);
+    // Wird das Kind mitten im Hinein-/Herausgehen weggezogen, bleibt es sonst im Schatten (Zähler-Tween läuft weiter)
+    this.tintTween?.stop();
+    this.tintTween = undefined;
+    kid.setVisible(true).setAlpha(1).clearTint();
   }
 
   override update(): void {
