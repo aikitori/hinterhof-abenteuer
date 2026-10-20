@@ -178,6 +178,22 @@ export class Dog extends Phaser.GameObjects.Container {
 
   // --- Von außen -----------------------------------------------------------
 
+  /** Schläft er gerade (nachts liegend)? */
+  get asleep(): boolean {
+    return this.sleeping;
+  }
+
+  /** Sieht eine Katze auf der Wiese: bellt und rennt ein Stück hinterher (nur wenn er gerade nichts anderes tut). */
+  chaseCat(x: number, y: number): void {
+    if (!this.canFetch) return;
+    this.facing = x > this.x ? 1 : -1;
+    this.bark();
+    this.walkTo(x - this.facing * 140, y, DOG.runSpeed * 0.7, () => {
+      this.bark();
+      this.toIdle();
+    });
+  }
+
   /** Wasser trifft ihn (Gießkanne, Sprenger): schnappt danach, wird nass. jump: kleiner Luftsprung. */
   soak(jump = false): void {
     if (this.mode === 'drag' || this.mode === 'fall') return;

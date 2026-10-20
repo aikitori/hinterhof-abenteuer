@@ -23,6 +23,8 @@ export interface HouseSpec {
   windows: Rect[];
   /** Oberes Ende der Schornsteine (für Rauch). */
   chimneys: { x: number; y: number }[];
+  /** Waagerechter Dachfirst (Texturkoordinaten), dort laufen manchmal Katzen entlang. */
+  ridge?: { y: number; left: number; right: number };
   draw(g: G): void;
   /** Schnee auf Dach, Schornsteinen und Fensterbänken (gleiche Fläche). */
   drawSnow(g: G): void;
@@ -246,6 +248,7 @@ const ROW: HouseSpec = (() => {
   const dormerWindows = dormers.map((cx) => ({ x: cx - 24, y: 150 - 64 + 12, w: 48, h: 42 }));
   return {
     width: 760,
+    ridge: { y: 52, left: 70, right: 690 },
     height: 380,
     windows: [...floor1, ...floor0, ...dormerWindows].map(glass),
     chimneys: [
@@ -280,6 +283,7 @@ const SOLAR: HouseSpec = (() => {
   const floor0 = [44, 174, 314, 444].map((x) => ({ x, y: 286, w: 72, h: 62 }));
   return {
     width: 560,
+    ridge: { y: 42, left: 90, right: 470 },
     height: 360,
     windows: [...floor1, ...floor0].map(glass),
     chimneys: [{ x: 125, y: 4 }],
@@ -319,6 +323,7 @@ const SMALL: HouseSpec = (() => {
   const dormerWindow = { x: 210 - 24, y: 132 - 64 + 12, w: 48, h: 42 };
   return {
     width: 420,
+    ridge: { y: 50, left: 80, right: 340 },
     height: 330,
     windows: [...floor1, ...floor0, dormerWindow].map(glass),
     chimneys: [{ x: 335, y: 12 }],

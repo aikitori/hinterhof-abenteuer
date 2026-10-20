@@ -74,6 +74,20 @@ import {
 } from './placeholders/snack';
 import { SNACK, SNACKS } from '../data/snacks';
 import { drawWhirlpool, TOY_PLACEHOLDERS } from './placeholders/toys';
+import { CATS } from '../data/cats';
+import {
+  CAT_BODY_SIZE,
+  CAT_FACES,
+  CAT_HEAD_SIZE,
+  CAT_LEG_SIZE,
+  CAT_SHORT_TAIL_SIZE,
+  CAT_TAIL_SIZE,
+  catKey,
+  drawCatBody,
+  drawCatHead,
+  drawCatLeg,
+  drawCatTail,
+} from './placeholders/cats';
 import { DOG_BODY_SIZE, DOG_HEAD_SIZE, DOG_LEG_SIZE, DOG_TAIL_SIZE, drawDogBody, drawDogHead, drawDogLeg, drawDogTail } from './placeholders/dog';
 import {
   BUNKER_FRAME_SIZE,
@@ -768,6 +782,15 @@ export class BootScene extends Phaser.Scene {
     this.makeTexture('dog-head', DOG_HEAD_SIZE.width, DOG_HEAD_SIZE.height, (g) => drawDogHead(g, 'normal'));
     this.makeTexture('dog-head-open', DOG_HEAD_SIZE.width, DOG_HEAD_SIZE.height, (g) => drawDogHead(g, 'open'));
     this.makeTexture('dog-head-sleep', DOG_HEAD_SIZE.width, DOG_HEAD_SIZE.height, (g) => drawDogHead(g, 'sleep'));
+    for (const c of CATS) {
+      const tail = c.shortTail ? CAT_SHORT_TAIL_SIZE : CAT_TAIL_SIZE;
+      this.makeTexture(catKey(c, 'body'), CAT_BODY_SIZE.width, CAT_BODY_SIZE.height, (g) => drawCatBody(g, c));
+      this.makeTexture(catKey(c, 'leg'), CAT_LEG_SIZE.width, CAT_LEG_SIZE.height, (g) => drawCatLeg(g, c));
+      this.makeTexture(catKey(c, 'tail'), tail.width, tail.height, (g) => drawCatTail(g, c));
+      for (const face of CAT_FACES) {
+        this.makeTexture(catKey(c, `head-${face}`), CAT_HEAD_SIZE.width, CAT_HEAD_SIZE.height, (g) => drawCatHead(g, c, face));
+      }
+    }
     // Steinterrasse mit Straßenmalkreide (Tor auf der Wiese, Malspiel dahinter)
     this.makeTexture('terrace-gate', TERRACE_GATE_SIZE.width, TERRACE_GATE_SIZE.height, drawTerraceGate);
     this.makeTexture('chalk-ground', GAME_WIDTH, GAME_HEIGHT, drawChalkGround);

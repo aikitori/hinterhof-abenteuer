@@ -16,6 +16,7 @@ import { DOG } from '../data/dog';
 import { createEquipment, Sandbox, type Equipment } from '../objects/Equipment';
 import { Bunker } from '../objects/Bunker';
 import { Dog } from '../objects/Dog';
+import { Cat, Cats } from '../objects/Cat';
 import { Fairy, fairySpot } from '../objects/Fairy';
 import { FAIRIES, MAX_FAIRIES, type FairyId } from '../data/brew';
 import type { BrewData } from './BrewScene';
@@ -70,6 +71,8 @@ export class PlaygroundScene extends Phaser.Scene {
   bunker!: Bunker;
   /** Der Hund (schwarzer Labrador), lebt immer auf der Wiese */
   dog!: Dog;
+  /** Nachbarskatzen, die ab und zu über Wiese und Dächer laufen */
+  cats!: Cats;
   /** Feen aus dem Zaubertrank, die älteste zuerst. */
   private fairies: Fairy[] = [];
   /** Fotos der Kamera an der Fotoleine */
@@ -169,6 +172,7 @@ export class PlaygroundScene extends Phaser.Scene {
     this.cameraControl = new CameraControl(this);
     this.space = new Space(this);
     this.dog = new Dog(this, DOG.start.x, DOG.start.y);
+    this.cats = new Cats(this);
     this.audio = new SoundSystem(this);
 
     this.setupInput();
@@ -712,7 +716,7 @@ export class PlaygroundScene extends Phaser.Scene {
 }
 
 /**
- * Vorrang beim Antippen: 0 = Kind oder kleines Spielzeug, 1 = großes Spielgerät,
+ * Vorrang beim Antippen: 0 = Kind oder kleines Spielzeug, 1 = großes Spielgerät oder Katze,
  * 2 = feststehende Deko (`setData('scenery', true)`), −1 = alles andere (Leisten, Kiste, Tor, Wolken).
  * Ein Kind auf einem Fahrzeug zählt wie das Fahrzeug: Wo sich beide überdecken, gewinnt das
  * obere – so lässt sich auch ein kleines Fahrzeug unter dem Kind noch fahren.
@@ -720,6 +724,8 @@ export class PlaygroundScene extends Phaser.Scene {
 function touchRank(obj: Phaser.GameObjects.GameObject): number {
   if (obj instanceof Kid) return obj.mode === 'riding' ? 1 : 0;
   if (obj instanceof Dog) return 0;
+  // Katzen: Kinder und Spielzeug davor behalten den Finger, Deko dahinter nicht
+  if (obj instanceof Cat) return 1;
   if (obj instanceof Toy) return obj.def.large ? 1 : 0;
   if (obj.getData('scenery') === true) return 2;
   return -1;

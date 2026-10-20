@@ -25,6 +25,7 @@ const SYNTH_LENGTH: Record<SynthId, number> = {
   beep: 0.08,
   rise: 0.75,
   bark: 0.15,
+  meow: 0.55,
   zap: 0.12,
   crack: 0.3,
   tock: 0.06,
@@ -252,6 +253,16 @@ export class SoundSystem {
         this.tone({ freq: 260, to: 150, type: 'square', dur: 0.12, vol: vol * 0.18, pan, attack: 0.005 });
         this.noise({ dur: 0.05, vol: vol * 0.25, filter: 1500, pan });
         break;
+      case 'meow': {
+        // „Mi-auu“: steigt an und fällt wieder, jede Katze etwas anders hoch
+        const f = 560 * [1, 1.2, 0.85][Phaser.Math.Clamp(Math.round(pitch ?? 0), 0, 2)];
+        this.tone({ freq: f, to: f * 1.5, type: 'triangle', dur: 0.2, vol, pan, attack: 0.04 });
+        this.tone({ freq: f * 2, to: f * 3, type: 'sine', dur: 0.2, vol: vol * 0.15, pan, attack: 0.04 });
+        this.scene.time.delayedCall(180, () =>
+          this.safely(() => this.tone({ freq: f * 1.5, to: f * 0.8, type: 'triangle', dur: 0.36, vol, pan, attack: 0.01 })),
+        );
+        break;
+      }
       case 'zap':
         // Kurzes, helles „Piu“ (Stern-Schuss)
         this.tone({ freq: 1500, to: 600, type: 'sine', dur: 0.12, vol, pan, attack: 0.004 });

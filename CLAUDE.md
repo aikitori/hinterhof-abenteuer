@@ -204,6 +204,20 @@ Spielwiese antippen und herumziehen. Kein Gewinnen, kein Verlieren, kein Text im
   Bälle (`tags: ['ball']`), `glide` und `boomerang` fängt er im Sprung oder hebt sie auf und bringt sie dem nächsten Kind.
 - Wasser: `dog.soak(jump?)` (Gießkanne, Sprenger), Pfützen, ins Planschbecken ziehen → danach schüttelt er sich, Kinder daneben kichern.
 
+## Katzen
+- Drei Nachbarskatzen (`CATS` in `src/data/cats.ts`: schwarz, rot mit weißem Bauch, grau getigert mit Stummelschwanz),
+  Werte in `CAT`, Zeichnungen der Teile in `src/scenes/placeholders/cats.ts` (`cat-<id>-body/-leg/-tail/-head-<normal|blink|meow>`).
+  `src/objects/Cat.ts`: `Cats` (`scene.cats`) schickt ab und zu eine los, wo man gerade hinschaut (höchstens `CAT.maxOut`,
+  bei Regen keine; `cats.visit('roof'|'meadow')` zum Ausprobieren). Eine `Cat` arbeitet eine Liste von Schritten ab (laufen,
+  springen, sitzen, putzen, liegen) und verschwindet danach. Wird nicht gespeichert.
+- Wiese: springt hinter dem Zaun hoch, läuft ein Stück darauf (nie an den Toren, `CAT.fenceAvoid`), springt herunter,
+  streunt, Kinder am Weg kichern; zum Gehen zurück auf den Zaun und dahinter hinunter. Tiefe je nach Ort: hinter dem Zaun,
+  auf dem Zaun (hinter den Büschen), auf der Wiese = y. Wacher Hund in der Nähe → flüchtet auf den Zaun, der Hund
+  bellt und rennt hinterher (`dog.chaseCat`).
+- Dach: läuft über den waagerechten First (`ridge` in `HOUSE_SPECS`), in der Häuser-Ebene (`HOUSE_PARALLAX`) und
+  hinter den Häusern, taucht also hinter dem Dach auf und wieder ab. Klein, aber mit großer Touch-Fläche.
+- Antippen = miau (`meow`, pitch = Katze), sie setzt sich und schaut her. Nicht ziehbar.
+
 ## Töne
 - Alles, was klingen soll, sendet `scene.events.emit('sound', { kind, pitch?, value?, voice?, x? })`
   (Typ `SoundEvent` in `src/data/sounds.ts`). `x` ist die Weltposition (leichtes Stereo).
@@ -224,7 +238,7 @@ Spielwiese antippen und herumziehen. Kein Gewinnen, kein Verlieren, kein Text im
   Grill: `sizzle`, `cut`, `squirt`, `wipe`, `yum`, `yuck`; Rakete: `liftoff`, `rocket`, `rocket-land`,
   `clouds`, `space`, `planet` (pitch), `ufo`, `shooting-star` (kein Dauer-Triebwerkston – der nervt);
   Bunker: `dig`, `bunker-found`, `hatch`;
-  Hund: `bark`, `dog-catch`, `dog-shake`;
+  Hund: `bark`, `dog-catch`, `dog-shake`; Katzen: `meow` (pitch 0–2);
   Kreide: `chalk`, `chalk-pick` (Wischen: `wipe`);
   Kamera: `camera` (Auslöser), `photo` (Foto an der Leine/groß);
   Strom-Werkstatt: `circuit-switch`, `circuit-wire`, `circuit-unwire`, `circuit-gate`, `circuit-nope`, `circuit-lamp`, `circuit-win`;

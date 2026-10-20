@@ -33,6 +33,7 @@ export type SynthId =
   | 'beep'
   | 'rise'
   | 'bark'
+  | 'meow'
   | 'zap'
   | 'crack'
   | 'tock';
@@ -89,6 +90,8 @@ export const SOUNDS: Record<string, SoundDef> = {
   bark: { synth: 'bark', volume: 0.55 },
   'dog-catch': { synth: 'pop', volume: 0.4 },
   'dog-shake': { synth: 'splash', volume: 0.3 },
+  // Katzen (pitch = welche Katze)
+  meow: { synth: 'meow', pitched: true, volume: 0.45 },
   // Steinterrasse mit Straßenmalkreide
   chalk: { synth: 'whoosh', volume: 0.12 },
   'chalk-pick': { synth: 'click', volume: 0.4 },
