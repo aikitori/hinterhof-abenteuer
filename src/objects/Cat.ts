@@ -176,9 +176,12 @@ export class Cat extends Phaser.GameObjects.Container {
         this.steps = [exit];
       }
     } else if (this.ground === 'roof') {
-      // Auf dem Dach: nur nicht mehr trödeln
-      this.steps = this.steps.filter((s) => s.kind !== 'rest');
-      if (this.step?.kind === 'rest') this.step = undefined;
+      // Auf dem Dach: gleich hier hinter dem First abtauchen (der letzte Schritt führt hinter das Dach)
+      const last = this.steps[this.steps.length - 1];
+      if (last?.kind === 'walk') {
+        this.step = undefined;
+        this.steps = [{ kind: 'walk', x: this.x + this.facing * 50 * this.size, y: last.y }];
+      }
     } else {
       // Noch hinter oder schon auf dem Zaun: gleich wieder dahinter verschwinden
       const jumping = this.step?.kind === 'jump';
