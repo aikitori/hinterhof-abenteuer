@@ -28,9 +28,10 @@ export const CATS: CatDef[] = [
 
 export const CAT = {
   /** Ganze Figur auf der Wiese verkleinert (Teile sind in voller Größe gezeichnet). */
-  scale: 0.72,
-  /** Auf dem Dach: so viel kleiner als auf der Wiese (dazu kommt die Größe des Hauses). */
-  roofScale: 0.32,
+  scale: 0.55,
+  /** Auf dem Dach: so viel kleiner als auf der Wiese (dazu kommt die Größe des Hauses). Etwas größer als
+   *  perspektivisch richtig, damit man sie in der Ferne noch entdeckt. */
+  roofScale: 0.6,
   walkSpeed: 95,
   runSpeed: 420,
   /** Pause zwischen zwei Besuchen. */

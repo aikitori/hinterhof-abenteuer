@@ -128,8 +128,8 @@ export class Cat extends Phaser.GameObjects.Container {
     this.applyParts();
     // Auf dem Dach ist die Katze winzig: dort eine viel größere Touch-Fläche.
     const roof = size < CAT.scale * 0.6;
-    const w = roof ? 460 : 220;
-    const h = roof ? 340 : 150;
+    const w = roof ? 460 : 260;
+    const h = roof ? 340 : 170;
     this.setSize(w, h).setScale(size);
     scene.add.existing(this);
     this.addToUpdateList();
